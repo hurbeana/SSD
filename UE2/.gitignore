@@ -68,3 +68,7 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/intellij
 
+.idea/inspectionProfiles/
+build/
+output/
+/.idea/
