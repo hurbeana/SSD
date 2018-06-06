@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="slotType">
+    <xs:sequence >
+      <xs:element name="input" type="inputoutputType" minOccurs="0"  maxOccurs="unbounded"/>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:element name="slot" type="slotType"/>
+        <xs:element name="ref">
+          <xs:complexType>
+            <xs:attribute name="id" type="xs:integer" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="conveyor" type="machines"/>
+        <xs:element name="generator" type="machines"/>
+        <xs:element name="machine" type="machines"/>
+        <xs:element name="turntable" type="machines"/>
+      </xs:choice>
+      <xs:element name="output" type="inputoutputType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="parallel" type="xs:boolean" default="false"/>
+  </xs:complexType>
+
+  <xs:complexType name="inputoutputType">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="item">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:integer">
+              <xs:attribute name="id" type="xs:integer" use="required"/>
+              <xs:attribute name="store" type="xs:integer"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="machines">
+    <xs:all>
+      <xs:element name="cost"/>
+      <xs:element name="time"/>
+    </xs:all>
+    <xs:attribute name="name"/>
+  </xs:complexType>
+
+  <xs:element name="system">
+    <xs:complexType>
+      <xs:sequence minOccurs="0">
+        <xs:element name="items" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="id" type="xs:integer" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stores" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="store">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="type">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="normal"/>
+                          <xs:enumeration value="waste"/>
+                          <xs:enumeration value="sent"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="capacity" type="xs:integer"/>
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:integer" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="area" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="slot" type="slotType"/>
+            </xs:sequence>
+            <xs:attribute name="name"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:key name="itemKeys">
+      <xs:selector xpath="items/item"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="storeKeys">
+      <xs:selector xpath="stores/store"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="slotKeys">
+      <xs:selector xpath="area/slot"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:keyref name="slotKeysRef" refer="slotKeys">
+      <xs:selector xpath="area/slot/ref"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+
+    <xs:keyref name="inputitemKeyRef" refer="itemKeys">
+      <xs:selector xpath="area/slot/input/item"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+    
+    <xs:keyref name="outputitemKeyRef" refer="itemKeys">
+      <xs:selector xpath="area/slot/output/item"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+
+    <xs:keyref name="inputstoreKeyRef" refer="slotKeys">
+      <xs:selector xpath="area/slot/store/item"/>
+      <xs:field xpath="@store"/>
+    </xs:keyref>
+    
+    <xs:keyref name="outputstoreKeyRef" refer="slotKeys">
+      <xs:selector xpath="area/slot/store/item"/>
+      <xs:field xpath="@store"/>
+    </xs:keyref>
+
+    <xs:unique name="uniqueName">
+      <xs:selector xpath=".//*"/>
+      <xs:field xpath="@name"/>
+    </xs:unique>
+  </xs:element>
+</xs:schema>

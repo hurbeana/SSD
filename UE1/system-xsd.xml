@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<system xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="system.xsd">
+  
+  <items>
+    <item id="1">item1</item>
+    <item id="2">item2</item>
+    <item id="3">item3</item>
+    <item id="4">item4</item>
+    <item id="5">item5</item>
+  </items>
+
+  <stores>
+    <store id="1">
+      <name>store1</name>
+      <type>normal</type>
+      <capacity>5</capacity>
+    </store>
+    <store id="2">
+      <name>store2</name>
+      <type>waste</type>
+      <capacity>8</capacity>
+    </store>
+    <store id="3">
+      <name>store3</name>
+      <type>sent</type>
+      <capacity>10</capacity>
+    </store>
+  </stores>
+
+  <area name="area1">
+    <slot id="1" name="slot1" parallel="true">
+      <input>
+        <item id="1" store="1">1</item>
+        <item id="2" store="1">1</item>
+      </input>
+      <conveyor name="conveyor1">
+        <cost>5</cost>
+        <time>2</time>
+      </conveyor>
+      <output>
+        <item id="3" store="1">1</item>
+        <item id="4" store="1">1</item>
+      </output>
+    </slot>
+
+    <slot id="2" name="slot2">
+      <generator name="gen1">
+        <cost>2</cost>
+        <time>3</time>
+      </generator>
+      <ref id="1"/>
+      <slot id="2" name="slot3">
+        <input>
+          <item id="5" store="2">5</item>
+        </input>
+        <ref id="1"/>
+        <ref id="2"/>
+      </slot>
+      <output>
+        <item id="3" store="2">2</item>
+        <item id="4" store="2">2</item>
+      </output>
+    </slot>
+  </area>
+  <area name="area2">
+    <slot id="4" name="slot4" parallel="true">
+      <conveyor name="someotherconveyor">
+        <cost>5</cost>
+        <time>2</time>
+      </conveyor>
+      <slot id="5" name="slot5">
+        <generator name="gen2">
+          <cost>2</cost>
+          <time>3</time>
+        </generator>
+        <ref id="1"/>
+        <slot id="6" name="slot6">
+          <ref id="2"/>
+        </slot>
+        <output>
+          <item id="3" store="2">2</item>
+          <item id="4" store="2">2</item>
+        </output>
+      </slot>
+    </slot>
+
+    
+  </area>
+</system>

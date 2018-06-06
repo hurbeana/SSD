@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE system SYSTEM "system.dtd">
+
+<system>
+  <items>
+    <item id="_it1">item1</item>
+    <item id="_it2">item2</item>
+    <item id="_it3">item3</item>
+    <item id="_it4">item4</item>
+    <item id="_it5">item5</item>
+  </items>
+
+  <stores>
+    <store id="_store1">
+      <name>store1</name>
+      <type>normal</type>
+      <capacity>5</capacity>
+    </store>
+    <store id="_store2">
+      <name>store2</name>
+      <type>waste</type>
+      <capacity>8</capacity>
+    </store>
+    <store id="_store3">
+      <name>store3</name>
+      <type>sent</type>
+      <capacity>10</capacity>
+    </store>
+  </stores>
+
+  <area name="area1">
+    <slot id="_slot1" name="slot1" parallel="true">
+      <input>
+        <ioitem id="_ioi1" store="1">1</ioitem>
+        <ioitem id="_ioi2" store="1">1</ioitem>
+      </input>
+      <conveyor name="conveyor1">
+        <cost>5</cost>
+        <time>2</time>
+      </conveyor>
+      <output>
+        <ioitem id="_ioi3" store="1">1</ioitem>
+        <ioitem id="_ioi4" store="1">1</ioitem>
+      </output>
+    </slot>
+
+    <slot id="_slot2" name="slot2">
+      <generator name="gen1">
+        <cost>2</cost>
+        <time>3</time>
+      </generator>
+      <ref id="_slot1"/>
+      <slot id="_slot3" name="slot3">
+        <input>
+          <ioitem id="_ioi5" store="2">5</ioitem>
+        </input>
+        <ref id="_slot1"/>
+        <ref id="_slot2"/>
+      </slot>
+      <output>
+        <ioitem id="_ioi55" store="2">2</ioitem>
+        <ioitem id="_ioi6" store="2">2</ioitem>
+      </output>
+    </slot>
+  </area>
+  <area name="area2">
+    <slot id="_slot4" name="slot4" parallel="true">
+      <conveyor name="someotherconveyor">
+        <cost>5</cost>
+        <time>2</time>
+      </conveyor>
+      <slot id="_slot5" name="slot5">
+        <generator name="gen2">
+          <cost>2</cost>
+          <time>3</time>
+        </generator>
+        <ref id="_slot1"/>
+        <slot id="_ioi666" name="slot6">
+          <ref id="_slot2"/>
+        </slot>
+        <output>
+          <ioitem id="_ioi7" store="2">2</ioitem>
+          <ioitem id="_ioi8" store="2">2</ioitem>
+        </output>
+      </slot>
+    </slot>
+
+    
+  </area>
+</system>
+

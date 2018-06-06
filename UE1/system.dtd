@@ -1,0 +1,36 @@
+<!ELEMENT system (items?, stores?, area*)>
+  <!ELEMENT items (item*)>
+    <!ELEMENT item (#PCDATA)>
+      <!ATTLIST item id ID #REQUIRED>
+  <!ELEMENT stores (store*)>
+    <!ELEMENT store (name, type, capacity)>
+    <!ATTLIST store id ID #REQUIRED>
+    <!-- cannot implement restrictions on elements here -->
+    <!ELEMENT name (#PCDATA)>
+    <!ELEMENT type (#PCDATA)>
+    <!ELEMENT capacity (#PCDATA)>
+  <!ELEMENT area (slot*)>
+    <!ATTLIST area name CDATA #REQUIRED>
+		<!ELEMENT slot (input*, (slot|ref|conveyor|generator|machine|turntable)+, output*)>
+			<!-- cannot use boolean here -->
+			<!ATTLIST slot id ID #REQUIRED
+				name CDATA #REQUIRED
+				parallel (true|false) "false">
+		<!-- had to rename item to ioitem here because of the global DTD contexts -->
+		<!ELEMENT input (ioitem+)>
+		<!ELEMENT output (ioitem+)>
+			<!ELEMENT ioitem (#PCDATA)>
+			<!ATTLIST ioitem id ID #REQUIRED
+			store CDATA #IMPLIED>
+		<!ELEMENT ref EMPTY>
+			<!ATTLIST ref id IDREF #REQUIRED>
+		<!ELEMENT conveyor ((cost,time)|(time,cost))>
+			<!ATTLIST conveyor name CDATA #IMPLIED>
+		<!ELEMENT generator ((cost,time)|(time,cost))>
+			<!ATTLIST generator name CDATA #IMPLIED>
+		<!ELEMENT machine ((cost,time)|(time,cost))>
+			<!ATTLIST machine name CDATA #IMPLIED>
+		<!ELEMENT turntable ((cost,time)|(time,cost))>
+			<!ATTLIST turntable name CDATA #IMPLIED>
+    <!ELEMENT cost (#PCDATA)>
+    <!ELEMENT time (#PCDATA)>
