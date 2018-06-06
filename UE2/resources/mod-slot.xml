@@ -1,0 +1,5 @@
+<mod>
+    <input item="1" slot="3" store="1">5</input>
+    <output item="9" slot="3" store="2">4</output>
+	<input item="2" slot="4">3</input>
+</mod>

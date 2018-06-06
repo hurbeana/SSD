@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bigareas>
+	<area name="cable assembly">
+		<slot id="1">
+			<time>20</time>
+			<cost>16</cost>
+		</slot>
+		<slot id="3">
+			<time>60</time>
+			<cost>200</cost>
+		</slot>
+	</area>
+</bigareas>

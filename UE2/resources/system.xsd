@@ -1,0 +1,118 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<xsd:element name="system" type="systemType">
+		<xsd:unique name="compKeys">
+			<xsd:selector xpath=".//."/>
+			<xsd:field xpath="@name"/>
+		</xsd:unique>
+		<xsd:key name="slotKeys">
+			<xsd:selector xpath=".//slot"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:key name="storeKeys">
+			<xsd:selector xpath="stores/store"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:key name="itemKeys">
+			<xsd:selector xpath="items/item"/>
+			<xsd:field xpath="@id"/>
+		</xsd:key>
+		<xsd:keyref name="itRef" refer="itemKeys">
+			<xsd:selector xpath=".//output/item|.//input/item"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+		<xsd:keyref name="storeRef" refer="storeKeys">
+			<xsd:selector xpath=".//output/item|.//input/item"/>
+			<xsd:field xpath="@store"/>
+		</xsd:keyref>
+		<xsd:keyref name="slotRef" refer="slotKeys">
+			<xsd:selector xpath=".//ref"/>
+			<xsd:field xpath="@id"/>
+		</xsd:keyref>
+	</xsd:element>
+	<xsd:complexType name="systemType">
+		<xsd:sequence>
+			<xsd:element name="items" type="itemsType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="stores" type="storesType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="area" type="areaType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="itemsType">
+		<xsd:sequence>
+			<xsd:element name="item" type="itemType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="itemType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="id" type="xsd:integer" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="storesType">
+		<xsd:sequence>
+			<xsd:element name="store" type="storeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="storeType">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="type" type="stypeType"/>
+			<xsd:element name="capacity" type="xsd:integer"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:integer" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="stypeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="normal"/>
+			<xsd:enumeration value="waste"/>
+			<xsd:enumeration value="sent"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="areaType">
+		<xsd:sequence>
+			<xsd:element name="slot" type="slotType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="slotType">
+		<xsd:sequence>
+			<xsd:element name="input" type="itType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:choice maxOccurs="unbounded">
+				<xsd:element name="slot" type="slotType"/>
+				<xsd:element name="ref" type="refType"/>
+				<xsd:element name="conveyor" type="componentType"/>
+				<xsd:element name="generator" type="componentType"/>
+				<xsd:element name="machine" type="componentType"/>
+				<xsd:element name="turntable" type="componentType"/>
+			</xsd:choice>
+			<xsd:element name="output" type="itType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="parallel" type="xsd:boolean" use="optional" default="false"/>
+		<xsd:attribute name="id" type="xsd:integer" use="required"/>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="itType">
+		<xsd:sequence>
+			<xsd:element name="item" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:integer">
+							<xsd:attribute name="id" type="xsd:integer" use="required"/>
+							<xsd:attribute name="store" type="xsd:integer" use="optional"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="refType">
+		<xsd:attribute name="id" type="xsd:integer" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="componentType">
+		<xsd:all>
+			<xsd:element name="cost" type="xsd:integer"/>
+			<xsd:element name="time" type="xsd:integer"/>
+		</xsd:all>
+		<xsd:attribute name="name" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>
