@@ -46,16 +46,15 @@
     <table>
       <tr>
         <xsl:for-each select="./*">
+          <th>
             <xsl:choose>
-              <xsl:when test="@name">
-                <th>
+              <xsl:when test="exists(@name)">
                   <xsl:value-of select="substring(local-name(),1,1)"/>:
                   <xsl:value-of select="@name"/>
-                </th>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:choose>
-                  <xsl:when test="ref">
+                  <xsl:when test="./ref">
                     <xsl:variable name="refvar" select="@id"/>
                     s:
                     <xsl:choose>
@@ -66,15 +65,17 @@
                     </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
+                    ITEM: <xsl:value-of select="local-name()"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
-        </xsl:for-each>
+          </th>
+      </xsl:for-each>
       </tr>
-      <tr>
-        <xsl:apply-templates select="*" />
-      </tr>
+    <tr>
+      <xsl:apply-templates select="./*" />
+    </tr>
     </table>
     <xsl:if test="exists(output)">
       <p>
