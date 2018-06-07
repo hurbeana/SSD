@@ -119,8 +119,5 @@
     <xsl:apply-templates select="//slot[@id = $refvar]"/>
   </xsl:template>
 
-  <!--xsl:template match="input"/>
-  <xsl:template match="output"/>
-  <xsl:template match="item"/-->
   <xsl:template match="*"/>
 </xsl:stylesheet>
