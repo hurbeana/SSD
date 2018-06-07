@@ -3,6 +3,7 @@ package ssd;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
@@ -32,11 +33,10 @@ public class SystemHandler extends DefaultHandler {
 	 * This variable stores the text content of XML Elements.
 	 */
 	private String eleText;
+	private String store;
+	private String slot;
 
-	/**
-	 * Insert local variables here
-	 */
-	
+
     
 	
     public SystemHandler(Document doc) {
@@ -62,10 +62,56 @@ public class SystemHandler extends DefaultHandler {
 		return systemDoc;
 	}
     
-    //***TODO***
-	//Specify additional methods to parse the bid document and modify the systemDoc
-	
-   
-	
+  @Override
+  public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXException {
+	  if(!qName.equals("mod")) {
+      this.store = attributes.getValue("store");
+      this.slot = attributes.getValue("slot");
+      if (this.slot == null) {
+        throw new SAXException("Couldn't find a slot attribute on " + qName + " element");
+      }
+    }
+  }
+
+  @Override
+  public void endElement(String uri, String localName, String qName) throws SAXException {
+	  if(!qName.equals("mod")) {
+      System.out.println();
+      System.out.println("qName: " + qName);
+      System.out.println("store: " + this.slot);
+      System.out.println("slot: " + this.store);
+      System.out.println("value: " + eleText);
+
+      try {
+        XPathExpression xPathExpression = xPath
+            .compile("//slot[@id = '" + slot + "']");
+        NodeList slotBoi = (NodeList)xPathExpression.evaluate(systemDoc, XPathConstants.NODESET);
+
+        xPathExpression = xPath.compile("boolean(//slot[@id = '" + slot + "']/" + qName + ")");
+        boolean hasTarget = (Boolean)xPathExpression.evaluate(systemDoc, XPathConstants.BOOLEAN);
+
+        for (int i = 0; i < slotBoi.getLength(); i++) {
+          Node nSlot = slotBoi.item(i);
+          if(!hasTarget) {
+            Element targetElem = systemDoc.createElement(qName);
+            if(qName.equals("input"))
+              nSlot.insertBefore(targetElem, nSlot.getFirstChild());
+            else
+              nSlot.appendChild(targetElem); //output
+          }
+          xPathExpression = xPath.compile("boolean(//slot[@id = '" + slot + "']/" + qName + "/item[])");
+          boolean itemExists =
+
+        }
+      } catch (XPathExpressionException e) {
+        e.printStackTrace();
+      }
+
+      this.slot = null;
+      this.store = null;
+      this.eleText = null;
+    }
+  }
 }
 
