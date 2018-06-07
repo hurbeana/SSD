@@ -45,17 +45,19 @@
     </xsl:if>
     <table>
       <tr>
-        <xsl:for-each select="./*">
-          <th>
+        <xsl:for-each select="*">
             <xsl:choose>
               <xsl:when test="exists(@name)">
+                <th>
                   <xsl:value-of select="substring(local-name(),1,1)"/>:
                   <xsl:value-of select="@name"/>
+                </th>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:choose>
-                  <xsl:when test="./ref">
+                  <xsl:when test=".[local-name() = 'ref']">
                     <xsl:variable name="refvar" select="@id"/>
+                    <th>
                     s:
                     <xsl:choose>
                       <xsl:when test="exists(//slot[@id = $refvar]/@name)">
@@ -63,14 +65,18 @@
                       </xsl:when>
                       <xsl:otherwise>slot</xsl:otherwise>
                     </xsl:choose>
+                    </th>
                   </xsl:when>
                   <xsl:otherwise>
-                    ITEM: <xsl:value-of select="local-name()"/>
+                    <xsl:if test=".[local-name() != 'input'] and .[local-name() != 'output']">
+                      <th>
+                      <xsl:value-of select="local-name()"/>
+                      </th>
+                    </xsl:if>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
-          </th>
       </xsl:for-each>
       </tr>
     <tr>
@@ -85,34 +91,6 @@
     </xsl:if>
   </xsl:template>
 
-<!--
-  <xsl:template name="slottemp">
-  <table>
-    <tr>
-      <xsl:for-each select="slot">
-        <td>
-          <table>
-            <xsl:for-each select="./*">
-              <xsl:choose>
-                <xsl:when test="@name">
-                  <th>
-                    <xsl:value-of select="substring(local-name(),1,1)"/>:
-                    <xsl:value-of select="@name"/>
-                  </th>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:apply-templates select="../ref"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </table>
-        </td>
-      </xsl:for-each>
-    </tr>
-  </table>
-  </xsl:template>
-  -->
-
   <xsl:template match="area">
     <h2>
       <xsl:value-of select="@name"/>
@@ -121,24 +99,28 @@
   </xsl:template>
 
   <xsl:template match="slot">
-    <td>
+    <td style="vertical-align:top">
       <xsl:call-template name="sequence"/>
     </td>
   </xsl:template>
 
-  <xsl:template name="combo" match="conveyor | generator | machine | turntable">
-    <td>
-      cost:
+  <xsl:template match="conveyor | generator | machine | turntable">
+    <td style="vertical-align:top">
+      Cost:
       <xsl:value-of select="cost"/>
-      time:
+      <br/>
+      Time:
       <xsl:value-of select="time"/>
     </td>
   </xsl:template>
-  
+
   <xsl:template match="ref">
+    <xsl:variable name="refvar" select="@id"/>
+    <xsl:apply-templates select="//slot[@id = $refvar]"/>
   </xsl:template>
 
-  <xsl:template match="input"></xsl:template>
-  <xsl:template match="output"></xsl:template>
-  <xsl:template match="item"></xsl:template>
+  <!--xsl:template match="input"/>
+  <xsl:template match="output"/>
+  <xsl:template match="item"/-->
+  <xsl:template match="*"/>
 </xsl:stylesheet>
