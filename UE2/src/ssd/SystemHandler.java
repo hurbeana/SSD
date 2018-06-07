@@ -33,6 +33,7 @@ public class SystemHandler extends DefaultHandler {
 	 * This variable stores the text content of XML Elements.
 	 */
 	private String eleText;
+	private String item;
 	private String store;
 	private String slot;
 
@@ -66,6 +67,7 @@ public class SystemHandler extends DefaultHandler {
   public void startElement(String uri, String localName, String qName, Attributes attributes)
       throws SAXException {
 	  if(!qName.equals("mod")) {
+	    this.item = attributes.getValue("item");
       this.store = attributes.getValue("store");
       this.slot = attributes.getValue("slot");
       if (this.slot == null) {
@@ -93,21 +95,24 @@ public class SystemHandler extends DefaultHandler {
 
         for (int i = 0; i < slotBoi.getLength(); i++) {
           Node nSlot = slotBoi.item(i);
-          if(!hasTarget) {
-            Element targetElem = systemDoc.createElement(qName);
-            if(qName.equals("input"))
-              nSlot.insertBefore(targetElem, nSlot.getFirstChild());
-            else
-              nSlot.appendChild(targetElem); //output
-          }
-          xPathExpression = xPath.compile("boolean(//slot[@id = '" + slot + "']/" + qName + "/item[])");
-          boolean itemExists =
+          //if(!hasTarget) {
+          //  Element targetElem = systemDoc.createElement(qName);
+          //  if(qName.equals("input"))
+          //    nSlot.insertBefore(targetElem, nSlot.getFirstChild());
+          //  else
+          //    nSlot.appendChild(targetElem); //output
+          //}
+          xPathExpression = xPath.compile("boolean(//slot[@id = '" + slot + "']/" + qName + "/item[@id = " + item + "])");
+          boolean itemExists = (Boolean)xPathExpression.evaluate(systemDoc, XPathConstants.BOOLEAN);
+          System.out.println(hasTarget ? "we have target" : "no target here");
+          System.out.println(itemExists ? "Item exists" : "Dosnt exist");
 
         }
       } catch (XPathExpressionException e) {
         e.printStackTrace();
       }
 
+      this.item = null;
       this.slot = null;
       this.store = null;
       this.eleText = null;
