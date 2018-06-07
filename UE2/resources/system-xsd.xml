@@ -1,92 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <items>
-        <item id="1">Hard Disk</item>
-        <item id="2">Mainboard</item>
-        <item id="3">CPU</item>
-        <item id="4">Memory</item>
-        <item id="5">GPU</item>
-        <item id="6">Power Supply</item>
-        <item id="7">DVD+RW</item>
-        <item id="8">Case</item>
-        <item id="9">Power Cable</item>
-        <item id="10">SATA Cable</item>
-		<item id="11">PreMB</item>
-    </items>
-    <stores>
-        <store id="1">
-			<name>Main Storage</name>
-			<type>normal</type>
-		    <capacity>100</capacity> 
-		</store>     
-		<store id="2">
-			<name>Garbage</name>
-			<type>waste</type>
-			<capacity>5</capacity>
-		</store>
-		<store id="3">
-			<name>Outgoing</name>
-			<type>sent</type>
-			<capacity>25</capacity>
-		</store>
-    </stores>
-    <area name="cable assembly">
-		<slot id="1" name="slot assembly" parallel="true">
-			<generator name="rubber to cable">
-				<cost>5</cost>
-				<time>10</time>
-			</generator>
-			<generator name="cooper">
-				<cost>1</cost>
-				<time>15</time>
-			</generator>
-			<machine name="plug producer">
-				<cost>10</cost>
-				<time>20</time>
-		    </machine>
-		</slot>
-		<slot id="2" name="cable slot">
-			<conveyor name="cable belt">
-				<cost>1</cost>
-				<time>25</time>
-			</conveyor>
-			<ref id="3" />
-		</slot>
-		<slot id="3" name="cable2 slot">
-			<machine name="assembler">
-				<cost>200</cost>
-				<time>60</time>
-			</machine>
-			<output>
-				<item id="9" store="2">1</item>
-				<item id="10" store="1">1</item>    
-			</output> 
-		</slot>
-	</area>
-	<area name="pc assembly">
-		<slot id="4" name="pc slot 1">    
-			<input>  
-				<item id="1" store="1">1</item>
-				<item id="9" store="1">2</item>
-				<item id="6" store="1">1</item>
-			</input> 	 
-			<ref id="2" /> 	
-			<generator name="case">
-			    <time>30</time>
-			    <cost>45</cost>	
-			</generator>
-		</slot>
-		<slot id="5" name="pc slot 2">
-			<input><item id="2" store="1">1</item></input>
-		        <input><item id="3" store="1">1</item>
-			       <item id="4" store="1">2</item>
-		       </input>
-			<machine name="mb assembler">
-			    <cost>150</cost>
-				<time>120</time>
-			</machine>
-			<output><item id="11" store="2">1</item></output>
-		</slot>
-		
-	</area>
+<system>
+  <items>
+    <item id="1">Hard Disk</item>
+    <item id="2">Mainboard</item>
+    <item id="3">CPU</item>
+    <item id="4">Memory</item>
+    <item id="5">GPU</item>
+    <item id="6">Power Supply</item>
+    <item id="7">DVD+RW</item>
+    <item id="8">Case</item>
+    <item id="9">Power Cable</item>
+    <item id="10">SATA Cable</item>
+    <item id="11">PreMB</item>
+  </items>
+  <stores>
+    <store id="1">
+      <name>Main Storage</name>
+      <type>normal</type>
+      <capacity>100</capacity>
+    </store>
+    <store id="2">
+      <name>Garbage</name>
+      <type>waste</type>
+      <capacity>5</capacity>
+    </store>
+    <store id="3">
+      <name>Outgoing</name>
+      <type>sent</type>
+      <capacity>25</capacity>
+    </store>
+  </stores>
+  <area name="cable assembly">
+    <slot id="1" name="slot assembly" parallel="true">
+      <generator name="rubber to cable">
+        <cost>5</cost>
+        <time>10</time>
+      </generator>
+      <generator name="cooper">
+        <cost>1</cost>
+        <time>15</time>
+      </generator>
+      <machine name="plug producer">
+        <cost>10</cost>
+        <time>20</time>
+      </machine>
+    </slot>
+    <slot id="2" name="cable slot">
+      <conveyor name="cable belt">
+        <cost>1</cost>
+        <time>25</time>
+      </conveyor>
+      <ref id="3"/>
+    </slot>
+    <slot id="3" name="cable2 slot">
+      <machine name="assembler">
+        <cost>200</cost>
+        <time>60</time>
+      </machine>
+      <output>
+        <item id="9" store="2">1</item>
+        <item id="10" store="1">1</item>
+      </output>
+    </slot>
+  </area>
+  <area name="pc assembly">
+    <slot id="4" name="pc slot 1">
+      <input>
+        <item id="1" store="1">1</item>
+        <item id="9" store="1">2</item>
+        <item id="6" store="1">1</item>
+      </input>
+      <ref id="2"/>
+      <generator name="case">
+        <time>30</time>
+        <cost>45</cost>
+      </generator>
+    </slot>
+    <slot id="5" name="pc slot 2">
+      <input>
+        <item id="2" store="1">1</item>
+      </input>
+      <input>
+        <item id="3" store="1">1</item>
+        <item id="4" store="1">2</item>
+      </input>
+      <machine name="mb assembler">
+        <cost>150</cost>
+        <time>120</time>
+      </machine>
+      <output>
+        <item id="11" store="2">1</item>
+      </output>
+    </slot>
+
+  </area>
 </system>

@@ -23,10 +23,13 @@
 	<!-- Xslt -->
 	<property name="xsltarea" value="${src.dir}/area-overview.xsl"/>
 	<property name="xsltareaoutput" value="${output.dir}/area-overview.html" />
-    
+
     <!-- Submission .zip file -->
     <property name="zip.name" value="ssd-exercise2-ss18.zip"/>
-    
+
+    <!-- Custom Stuff -->
+    <property name="browser" location="C:/Program Files/Mozilla Firefox/firefox.exe"/>
+
 	<path id="classpath-ssd">
         <pathelement location="${build.dir}"/>
     </path>
@@ -90,6 +93,9 @@
 			force="true"
 			classpathref="classpath-query">
 		</xslt>
+        <exec executable="${browser}" spawn="true">
+            <arg value="${xsltareaoutput}"/>
+        </exec>
     </target>
 
     
