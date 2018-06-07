@@ -65,50 +65,32 @@ public class SSD {
      */
     private static void transform(String inputPath, String modPath, String outputPath) throws Exception {
         // Read in the data from the system xml document, created in example 1
-    	
-    	
-        
-        
+        Document document = documentBuilder.parse(inputPath);
+
         // Create an input source for the mod-slot document
-    	
-		
-		
-		
+    	  XMLReader parser = XMLReaderFactory.createXMLReader();
 
         // start the actual parsing
-        
-	   
-        
-       
-        // Validate file before storing
-        
-		
-		
-		
-		
-		
-        
-        
+        SystemHandler handler = new SystemHandler(document);
+        parser.setContentHandler(handler);
+        parser.parse(modPath);
+
         // get the document from the SystemHandler
-        
-		
-		
-		
-        
+        Document parsedDoc = handler.getDocument();
+        DOMSource domSource = new DOMSource(parsedDoc);
+
         //validate
-        
-		
-		
-		
-		
-        
+        File schemaFile = new File("resources/system.xsd");
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(schemaFile);
+        Validator validator = schema.newValidator();
+        validator.validate(domSource);
+
         //store the document
-        
-		
-		
-		
-		
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(domSource, new StreamResult(new File(outputPath)));
     }
+
 
     /**
      * Prints an error message and exits with return code 1
