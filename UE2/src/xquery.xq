@@ -11,12 +11,13 @@
               <slot id="{$s/@id}">
                 <time>
                   {
-                    for $t in $s//time
+                    let $max := fn:max($s//time)
+                    let $sum := fn:sum($s//time)
                     return
                       if ($s/@parallel) then
-                        fn:max($t)
+                        $max
                       else
-                        fn:sum($t)
+                        $sum
                   }
                 </time>
                 <cost>{fn:sum($s//cost)}</cost>
